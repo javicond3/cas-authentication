@@ -249,8 +249,11 @@ CASAuthentication.prototype._login = function(req, res, next) {
 
     // Set up the query parameters.
     var query = {
-        service: this.service_url + url.parse(req.url).pathname,
-        renew: this.renew
+        service: this.service_url + url.parse(req.url).pathname,  
+    };
+    //modificacion para SSO  
+    if (this.renew === true){
+	query.renew = true;
     };
 
     // Redirect to the CAS login.
