@@ -211,7 +211,9 @@ CASAuthentication.prototype._handle = function(req, res, next, authType) {
     if (req.session[ this.session_name ]) {
         // If this is a bounce redirect, redirect the authenticated user.
         if (authType === AUTH_TYPE.BOUNCE_REDIRECT) {
-            res.redirect(req.session.cas_return_to);
+            req.session.save(function () {
+                res.redirect(req.session.cas_return_to);
+            })
         }
         // Otherwise, allow them through to their request.
         else {
@@ -355,7 +357,9 @@ CASAuthentication.prototype._handleTicket = function(req, res, next) {
                     if (this.session_info) {
                         req.session[ this.session_info ] = attributes || {};
                     }
-                    res.redirect(req.session.cas_return_to);
+                    req.session.save(function () {
+                        res.redirect(req.session.cas_return_to);
+                    })
                 }
             }.bind(this));
         }.bind(this));
